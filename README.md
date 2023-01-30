@@ -1,5 +1,5 @@
 # Install
-to instal just click <a href="">here!</a><br>
+to instal just click <a href="https://github.com/zufinho/zufinhonuker/raw/main/zufinhonukerr.exe">here!</a><br>
 <br>
 <br>
 # How it works?
