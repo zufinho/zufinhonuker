@@ -10,3 +10,17 @@ look to this works you bot need be on server<br>
 to start nuker just say (prefix)execute in ANY chat!<br>
 so the options will appear at your console!!!<br>
 enjoy!<br>
+<br>
+<br>
+<br>
+<img src="print1.png">
+<br>
+<br>
+<br>
+# Functions
+We have many unique features!<br>
+are they:<br>
+Role spammer, Role deleter<br>
+Channel spam, Channel deleter-category, Category spam<br>
+Webhook spam all channels, Change nick all, Ban all, Add a role to all<br>
+Server name changer.
