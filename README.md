@@ -23,4 +23,4 @@ are they:<br>
 Role spammer, Role deleter<br>
 Channel spam, Channel deleter-category, Category spam<br>
 Webhook spam all channels, Change nick all, Ban all, Add a role to all<br>
-Server name changer, invite spammer
+Server name changer, invite spammer (VERY SLOW), **DM Spammer**
