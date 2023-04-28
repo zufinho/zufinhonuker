@@ -1,5 +1,5 @@
 # Install
-to instal just click <a href="https://github.com/zufinho/zufinhonuker/raw/main/zufinhonuker.exe">here!</a><br>
+to instal just click <a href="https://github.com/zufinho/zufinhonuker/raw/main/zufinhonuker.py">here!</a><br>
 <br>
 <br>
 # How it works?
@@ -24,3 +24,10 @@ Role spammer, Role deleter<br>
 Channel spam, Channel deleter-category, Category spam<br>
 Webhook spam all channels, Change nick all, Ban all, Add a role to all<br>
 Server name changer, invite spammer (VERY SLOW), **DM Spammer**
+
+
+
+
+
+
+# Finally open source!
