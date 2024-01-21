@@ -1,3 +1,6 @@
+# WARNING!
+THIS IS ONLY WORKING AT PYTHON 3.10!
+
 # Install
 to instal just click <a href="https://github.com/zufinho/zufinhonuker/raw/main/zufinhonuker.py">here!</a><br>
 <br>
