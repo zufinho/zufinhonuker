@@ -1,0 +1,3 @@
+@echo off
+echo Installing requeriments...
+pip install -r requeriments.txt
