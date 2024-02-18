@@ -1,13 +1,9 @@
 import requests
 import sys
-import os
 if len(sys.argv) != 5:
     ("Usage: <serverid> <token> <type of channel> <channel name>")
     sys.exit(1)
-serverid=sys.argv[1]
-token=sys.argv[2]
-typechannel=int(sys.argv[3])
-channelname=sys.argv[4]
+serverid,token,typechannel,channelname=sys.argv[1], sys.argv[2], int(sys.argv[3]), sys.argv[4]
 
 
 api = f"https://discord.com/api/v9/guilds/{serverid}/channels"

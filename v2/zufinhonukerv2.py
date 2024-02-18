@@ -77,11 +77,11 @@ while True:
     print()
     printcolor(version)
     print()
-    printcolor("[1] Create Channels         [2] Delete Channels")
+    printcolor("[1] Create Channels         [2] Delete Channels         [3] Create Roles")
     cmd=input(Colorate.Horizontal(Colors.purple_to_blue,">",1))
     if cmd=="1":
         #create channels
-        printcolor("Name of channel")
+        printcolor("Name of channel:")
         channelname=input(Colorate.Horizontal(Colors.purple_to_blue,">",1))
         printcolor("Channel type:")
         printcolor("text/voice/category")
@@ -127,3 +127,12 @@ while True:
 
         else:
             print(Colorate.Color(Colors.red,f"Error at search channels: {response.status_code} - {response.text}",1))
+    elif cmd=="3":
+        printcolor("Name of role:")
+        rolename=input(Colorate.Horizontal(Colors.purple_to_blue,">",1))
+        printcolor("Amount of roles:")
+        roleamount=int(input(Colorate.Horizontal(Colors.purple_to_blue,">",1)))
+        while count<roleamount:
+            os.system(f"start src/createrole.pyw {guildid} {token} {rolename}")
+            printcolor(f"requested to create {rolename}")
+            count=count+1
