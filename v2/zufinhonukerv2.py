@@ -108,3 +108,22 @@ while True:
                 os.system(f"start src/createchannel.pyw {guildid} {token} {channeltype} {channelname}")
                 printcolor(f"requested to create {channelname}")
                 count=count+1
+    elif cmd=="2":
+        #delete channels
+
+        #get channels ids and delete then
+        guildapichannels = f"https://discord.com/api/v9/guilds/{guildid}/channels"
+        headers = {
+            "Authorization": f"Bot {token}",
+        }
+
+        response = requests.get(guildapichannels, headers=headers)
+
+        if response.status_code == 200:
+            channels = response.json()
+            for channel in channels:
+                printcolor(f"requested to delete {channel['name']}")
+                os.system(f"start src/deletechannel.pyw {token} {channel['id']}")
+
+        else:
+            print(Colorate.Color(Colors.red,f"Error at search channels: {response.status_code} - {response.text}",1))

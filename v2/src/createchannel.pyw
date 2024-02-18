@@ -21,4 +21,3 @@ payload = {
 }
 createchannel=requests.post(api, headers=headers, json=payload)
 print(createchannel.status_code)
-os.system(f"echo {createchannel} >> log.txt")
