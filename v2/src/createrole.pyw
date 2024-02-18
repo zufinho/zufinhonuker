@@ -19,4 +19,7 @@ payload = {
     "mentionable": False
 }
 create = requests.post(api_url, headers=headers, json=payload)
-print(create.status_code)
+print(create.status_code,create.text)
+with open("result.log","a") as log:
+    log.write(str(create.status_code))
+    log.write("\n")
