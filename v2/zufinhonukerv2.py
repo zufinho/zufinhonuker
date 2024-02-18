@@ -22,31 +22,32 @@ banner="""
 ░░░╚═╝░░░╚══════╝
 """
 version="alpha 1.0 - v2"
-#color classes
-class printcolor():
-    def default(text):
-        print(Colorate.Horizontal(Colors.purple_to_blue,text,1))
+def printcolor(text):
+    print(Colorate.Horizontal(Colors.purple_to_blue,text,1))
+#varivbles importants
 guildverified=0
+cango=0
+count=0
 while True:
     os.system("cls")
-    printcolor.default(banner)
+    printcolor(banner)
     print()
     print()
-    printcolor.default(version)
+    printcolor(version)
     print()
-    printcolor.default("Digit the token bot:")
+    printcolor("Digit the token bot:")
     token=input(Colorate.Horizontal(Colors.purple_to_blue,">",1))
     #verify if bot token is valid
     tokenverify = requests.get("https://discord.com/api/v9/users/@me", headers={"Authorization": f"Bot {token}"})
     if tokenverify.status_code==200:
         while True:
             os.system("cls")
-            printcolor.default(banner)
+            printcolor(banner)
             print()
             print()
-            printcolor.default(version)
+            printcolor(version)
             print()
-            printcolor.default("Digit the guild id:")
+            printcolor("Digit the guild id:")
             guildid=input(Colorate.Horizontal(Colors.purple_to_blue,">",1))
             #verify if bot in guild
             guildverify=requests.get("https://discord.com/api/v9/users/@me/guilds", headers={"Authorization": f"Bot {token}"})
@@ -55,13 +56,55 @@ while True:
                     guildverified=1
                     break
             else:
-                printcolor.default("Bot not is in guild")
+                printcolor("Bot not is in guild")
                 time.sleep(3)
             if guildverified==1:
                 break
     else:
-        printcolor.default("insert a valid token")
+        printcolor("insert a valid token")
         time.sleep(3)
     if guildverified==1:
         break
 #all ok
+
+#the funcionally nuker 
+while True:
+    cango=0
+    count=0
+    os.system("cls")
+    printcolor(banner)
+    print()
+    print()
+    printcolor(version)
+    print()
+    printcolor("[1] Create Channels         [2] Delete Channels")
+    cmd=input(Colorate.Horizontal(Colors.purple_to_blue,">",1))
+    if cmd=="1":
+        #create channels
+        printcolor("Name of channel")
+        channelname=input(Colorate.Horizontal(Colors.purple_to_blue,">",1))
+        printcolor("Channel type:")
+        printcolor("text/voice/category")
+        channeltype=input(Colorate.Horizontal(Colors.purple_to_blue,">",1))
+        if channeltype.lower()=="text":
+            channeltype=0
+            cango=1
+        elif channeltype.lower()=="voice":
+            channeltype=2
+            cango=1
+        elif channeltype.lower()=="category":
+            channeltype=4
+            cango=1
+        else:
+            print(Colorate.Color(Colors.red,"type of channel incorrect",1))
+            time.sleep(3)
+        if cango==1:
+            printcolor("Amount of channels:")
+            amountchannels=int(input(Colorate.Horizontal(Colors.purple_to_blue,">",1)))
+
+            #action
+            print(channeltype)
+            while count<=amountchannels:
+                os.system(f"start src/createchannel.pyw {guildid} {token} {channeltype} {channelname}")
+                printcolor(f"requested to create {channelname}")
+                count=count+1

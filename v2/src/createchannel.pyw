@@ -1,11 +1,12 @@
 import requests
 import sys
+import os
 if len(sys.argv) != 5:
     ("Usage: <serverid> <token> <type of channel> <channel name>")
     sys.exit(1)
 serverid=sys.argv[1]
 token=sys.argv[2]
-typechannel=sys.argv[3]
+typechannel=int(sys.argv[3])
 channelname=sys.argv[4]
 
 
@@ -20,3 +21,4 @@ payload = {
 }
 createchannel=requests.post(api, headers=headers, json=payload)
 print(createchannel.status_code)
+os.system(f"echo {createchannel} >> log.txt")
