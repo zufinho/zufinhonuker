@@ -1,7 +1,7 @@
 import sys
 import requests
 if len(sys.argv) != 4:
-    print("Usage: <token> <channel_id>")
+    print("Usage: <bot_token> <channel_id>")
 token, channel_id = sys.argv[1], sys.argv[2]
 
 headers = {
