@@ -10,9 +10,13 @@ except:
     os.system("pip install requests pystyle")
     import requests
     from pystyle import Colorate,Colors
-banner="""
-
-zufinho nuker v2
+banner=r"""
+               _____.__       .__                           __                        ________  
+__________ ___/ ____\__| ____ |  |__   ____     ____  __ __|  | __ ___________  ___  _\_____  \ 
+\___   /  |  \   __\|  |/    \|  |  \ /  _ \   /    \|  |  \  |/ // __ \_  __ \ \  \/ //  ____/ 
+ /    /|  |  /|  |  |  |   |  \   Y  (  <_> ) |   |  \  |  /    <\  ___/|  | \/  \   //       \ 
+/_____ \____/ |__|  |__|___|  /___|  /\____/  |___|  /____/|__|_ \\___  >__|      \_/ \_______ \
+      \/                    \/     \/              \/           \/    \/                      \/
 
 discord.gg/jvrBvcCm72
 """
@@ -21,8 +25,6 @@ def printcolor(text):
     print(Colorate.Horizontal(Colors.purple_to_blue,text,1))
 #varivbles importants
 guildverified=0
-cango=0
-count=0
 while True:
     os.system("clear")
     printcolor(banner)
@@ -253,7 +255,7 @@ while True:
     elif cmd == "13":
         #invite spammer
         printcolor("Repeat how many times per channel?")
-        new=int(input(">"))
+        new=int(input(Colorate.Horizontal(Colors.purple_to_blue,">",1)))
         api = requests.get(f"https://discord.com/api/v9/guilds/{guildid}/channels", headers={"Authorization": f"Bot {token}"})
         for channel in api.json():
             count=0
