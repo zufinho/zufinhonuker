@@ -1,0 +1,5 @@
+--2.3--
+New banner at linux version + fixes
+New Functions!
+Server Change Name,Server Clone and Panel Server Info (only windows)
+DM Spam For only one member!

